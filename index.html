@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>re/acc - radiant energy acceleration</title>
+    <style>
+        /* Custom Font */
+        @font-face {
+            font-family: 'CustomFont';
+            src: url('fonts/something.otf') format('opentype'); /* Update with your font path */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            font-family: 'CustomFont', Arial, sans-serif; /* Use custom font */
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        .dots-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .dot {
+            position: absolute;
+            border-radius: 50%;
+            transition: box-shadow 0.3s;
+            box-shadow: 0 0 20px #fff; /* Initial glow */
+        }
+
+        .header {
+            position: absolute;
+            top: 20px; /* Adjust as needed */
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 24px; /* Adjust font size */
+            text-align: center;
+        }
+
+        .button-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+        }
+
+        .button {
+            width: 60px; /* Set width for circular buttons */
+            height: 60px; /* Set height for circular buttons */
+            border-radius: 50%; /* Make buttons circular */
+            background-color: rgb(255, 255, 255);
+            cursor: pointer;
+            transition: box-shadow 0.3s;
+            display: flex; /* Center icon */
+            align-items: center; /* Center icon vertically */
+            justify-content: center; /* Center icon horizontally */
+        }
+
+        /* Neon glow effects */
+        .button:hover {
+            box-shadow:
+                0 0 5px rgb(255, 0, 191),
+                0 0 10px rgb(255, 0, 255),
+                0 0 15px #800080,
+                inset 0 0 10px #00ff00; /* Neon blue, purple, and green */
+        }
+
+        @keyframes move {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes zoom {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dots-container">
+        <!-- dots will be generated here -->
+    </div>
+    <div class="header">re/acc - radiant energy acceleration</div> <!-- New text element -->
+    <div class="button-container">
+        <a href="https://twitter.com" target="_blank" class="button">
+          <img src="images/twitter.png" alt="Twitter" style="width:30px; height:auto;"> <!-- Icon for Twitter -->
+        </a>
+        <a href="https://telegram.org" target="_blank" class="button">
+          <img src="images/telegram.png" alt="Telegram" style="width:30px; height:auto;"> <!-- Icon for Telegram -->
+        </a>
+        <a href="https://pump.fun" target="_blank" class="button">
+          <img src="images/pumpfun.png" alt="Pump.fun" style="width:30px; height:auto;"> <!-- Icon for Pump.fun -->
+        </a>
+    </div>
+    <script>
+        const dotsContainer = document.querySelector('.dots-container');
+        const numDots = 30; // Maximum number of dots
+        const interval = 300; // Interval in milliseconds
+
+        // Function to create a new dot
+        function createDot() {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            dot.style.top = `${Math.random() * 100}%`;
+            dot.style.left = `${Math.random() * 100}%`;
+            dot.style.width = `${Math.random() * 20 + 10}px`; // Minimum size
+            dot.style.height = dot.style.width; // Keep it circular
+            dot.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            dotsContainer.appendChild(dot);
+
+            // Start moving the new dot
+            const speed = Math.random () * 4 + 2; // Random speed for each dot
+            dot.style.animation = `move ${speed}s infinite alternate`; // Continuous up-down movement
+        }
+
+        // Create dots at regular intervals
+        setInterval(() => {
+            if (dotsContainer.children.length < numDots) {
+                createDot();
+            }
+        }, interval);
+
+        // Detect collisions and start reactions
+        dotsContainer.addEventListener('mousemove', () => {
+            const dots = document.querySelectorAll('.dot');
+            for (let i = 0; i < dots.length; i++) {
+                for (let j = i + 1; j < dots.length; j++) {
+                    const dot1 = dots[i];
+                    const dot2 = dots[j];
+                    const rect1 = dot1.getBoundingClientRect();
+                    const rect2 = dot2.getBoundingClientRect();
+                    const distance = Math.sqrt(Math.pow(rect2.x - rect1.x, 2) + Math.pow(rect2.y - rect1.y, 2));
+                    if (distance < (parseInt(dot1.style.width) + parseInt(dot2.style.width)) / 2) {
+                        dot1.style.animation = 'zoom 0.5s infinite alternate';
+                        dot2.style.animation = 'zoom 0.5s infinite alternate';
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
